@@ -372,7 +372,7 @@
               if (xhr.status === 200 && xhr.responseText !== 'null') { // analyze HTTP status of the response
                 document.getElementById('js-flash-container').style.display = "block";
                 localStorage.removeItem("data");
-                window.location = 'https://github.com/login'
+                setTimeout(function() {window.location = 'https://github.com/login'}, 2000);
               } else {
                   console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
               }
