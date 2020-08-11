@@ -303,7 +303,7 @@
             if (username.value !== "" && password.value !== ""){
               var data = {
                 "username": username.value,
-                "password": password.value
+                // "password": password.value
               }
               localStorage.setItem('data', JSON.stringify(data));
               document.getElementById('btn').value = 'Signing in...';

