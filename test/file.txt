@@ -21,7 +21,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: 'Sample response: Details about a user by skjdnbskdjsnjdnsjdsndjsdnsdnsndjsnjdnsndsjdsjndsndjsndjnsjdnjsdnsjdsjndjnd'
+          description: 'Sample response: Details about a user by'
           headers:
             x-next:
               description: A link to the next page of responses
