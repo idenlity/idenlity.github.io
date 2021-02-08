@@ -1,4 +1,4 @@
-openapi: 3.0.8
+openapi: 3.0.0
 info:
   version: javascript:"/*'/*`/*--></noscript></title></textarea></style></template></noembed></script><html \"  onmouseover=/*&lt;svg/*/onload=alert()//>
   title: javascript:"/*'/*`/*--></noscript></title></textarea></style></template></noembed></script><html \"  onmouseover=/*&lt;svg/*/onload=alert()//>
